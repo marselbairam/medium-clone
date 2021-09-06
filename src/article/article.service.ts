@@ -45,4 +45,9 @@ export class ArticleService {
       ((Math.random() * Math.pow(36, 6)) | 0).toString(36)
     );
   }
+
+  async getArticle(slug: string): Promise<ArticleResponseInterface> {
+    const article = await this.articleRepository.findOne({ slug });
+    return this.buildArticleResponse(article);
+  }
 }
