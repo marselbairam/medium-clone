@@ -36,6 +36,10 @@ export class ArticleService {
     return { article };
   }
 
+  async findBySlug(slug: string): Promise<ArticleEntity> {
+    return await this.articleRepository.findOne({ slug });
+  }
+
   private getSlug(title: string): string {
     return (
       slugify(title, {
@@ -55,7 +59,7 @@ export class ArticleService {
     slug: string,
     currentUserId: number,
   ): Promise<DeleteResult> {
-    const article = await this.articleRepository.findOne({ slug });
+    const article = await this.findBySlug(slug);
 
     if (!article) {
       throw new HttpException("Article doesn't exist", HttpStatus.NOT_FOUND);
@@ -66,5 +70,25 @@ export class ArticleService {
     }
 
     return await this.articleRepository.delete({ slug });
+  }
+
+  async updateArticle(
+    slug: string,
+    currentUserId: number,
+    updateArticleDto: CreateArticleDto,
+  ): Promise<ArticleEntity> {
+    const article = await this.findBySlug(slug);
+
+    if (!article) {
+      throw new HttpException("Article doesn't exist", HttpStatus.NOT_FOUND);
+    }
+
+    if (article.author.id !== currentUserId) {
+      throw new HttpException("You aren't an author", HttpStatus.FORBIDDEN);
+    }
+
+    Object.assign(article, updateArticleDto);
+
+    return await this.articleRepository.save(article);
   }
 }
