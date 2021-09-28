@@ -1,9 +1,7 @@
-import { ConnectionOptions } from 'typeorm';
-import * as dotenv from 'dotenv';
-
-dotenv.config({
+require('dotenv').config({
   path: '.development.env',
 });
+import { ConnectionOptions } from 'typeorm';
 
 const config: ConnectionOptions = {
   type: 'postgres',

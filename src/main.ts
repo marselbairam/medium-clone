@@ -1,13 +1,3 @@
-import * as dotenv from 'dotenv';
-
-dotenv.config({
-  path: '.development.env',
-});
-
-if (!process.env.IS_TS_NODE) {
-  require('module-alias/register');
-}
-
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
