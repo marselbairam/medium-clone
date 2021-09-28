@@ -4,10 +4,9 @@ import { UserEntity } from '@app/user/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
-import { JWT_SECRET } from '@app/config';
 import { UserResponseInterface } from '@app/user/types/user-response.interface';
 import { AuthUserDto } from '@app/user/dto/auth-user.dto';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 import { UpdateUserDto } from '@app/user/dto/update-user.dto';
 
 @Injectable()
@@ -49,7 +48,7 @@ export class UserService {
         username: user.username,
         email: user.email,
       },
-      JWT_SECRET,
+      process.env.JWT_SECRET,
     );
   }
 
