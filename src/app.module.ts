@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AppController } from '@app/app.controller';
-import { AppService } from '@app/app.service';
 import { TagModule } from '@app/tag/tag.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import ormconfig from '@app/ormconfig';
+import ormconfig from '../ormconfig';
 import { UserModule } from '@app/user/user.module';
 import { ArticleModule } from '@app/article/article.module';
 import { ProfileModule } from '@app/profile/profile.module';
@@ -16,7 +14,7 @@ import { ProfileModule } from '@app/profile/profile.module';
     ArticleModule,
     ProfileModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
