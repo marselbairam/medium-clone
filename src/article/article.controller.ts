@@ -18,11 +18,14 @@ import { CreateArticleDto } from '@app/article/dto/create-article.dto';
 import { ArticleResponseInterface } from '@app/article/types/article-response.interface';
 import { ArticlesResponseInterface } from '@app/article/types/articles-response.interface';
 import { BackendValidationPipe } from '@app/shared/pipes/backend-validation.pipe';
+import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('articles')
 @Controller('articles')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
 
+  @ApiOperation({ summary: 'Unfollow user' })
   @Get()
   async findAll(
     @User('id') currentUserId: number,
@@ -31,6 +34,7 @@ export class ArticleController {
     return await this.articleService.findAll(currentUserId, query);
   }
 
+  @ApiOperation({ summary: 'Unfollow user' })
   @Get('feed')
   @UseGuards(AuthGuard)
   async getFeed(
@@ -40,6 +44,11 @@ export class ArticleController {
     return await this.articleService.getFeed(currentUserId, query);
   }
 
+  @ApiOperation({ summary: 'Create article' })
+  @ApiBody({
+    description: 'User credentials',
+    type: CreateArticleDto,
+  })
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(new BackendValidationPipe())
@@ -54,6 +63,7 @@ export class ArticleController {
     return this.articleService.buildArticleResponse(article);
   }
 
+  @ApiOperation({ summary: 'Get article' })
   @Get(':slug')
   async getArticle(
     @Param('slug') slug: string,
@@ -61,6 +71,7 @@ export class ArticleController {
     return await this.articleService.getArticle(slug);
   }
 
+  @ApiOperation({ summary: 'Delete article' })
   @Delete(':slug')
   @UseGuards(AuthGuard)
   async deleteArticle(
@@ -70,6 +81,7 @@ export class ArticleController {
     return await this.articleService.deleteArticle(slug, currentUserId);
   }
 
+  @ApiOperation({ summary: 'Update article' })
   @Put(':slug')
   @UseGuards(AuthGuard)
   @UsePipes(new BackendValidationPipe())
@@ -86,6 +98,7 @@ export class ArticleController {
     return this.articleService.buildArticleResponse(article);
   }
 
+  @ApiOperation({ summary: 'Add article to favorites' })
   @Post(':slug/favorite')
   @UseGuards(AuthGuard)
   async addArticleToFavorites(
@@ -99,6 +112,7 @@ export class ArticleController {
     return this.articleService.buildArticleResponse(article);
   }
 
+  @ApiOperation({ summary: 'Remove article from favorites' })
   @Delete(':slug/favorite')
   @UseGuards(AuthGuard)
   async deleteArticleFromFavorites(
